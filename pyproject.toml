@@ -1,0 +1,18 @@
+[project]
+name = "t-py-fapi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.20.0",
+    "fastapi[standard]>=0.142.2",
+    "pytest>=9.1.1",
+]
+
+[project.scripts]
+t-py-fapi = "t_py_fapi:main"
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"
