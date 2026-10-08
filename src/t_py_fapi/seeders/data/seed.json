@@ -1,0 +1,15 @@
+{
+  "cities": [
+    {"name": "Berlin"},
+    {"name": "Hamburg"},
+    {"name": "Munich"}
+  ],
+  "streets": [
+    {"name": "Unter den Linden", "city": "Berlin"},
+    {"name": "Kurfürstendamm", "city": "Berlin"},
+    {"name": "Jungfernstieg", "city": "Hamburg"},
+    {"name": "Reeperbahn", "city": "Hamburg"},
+    {"name": "Marienplatz", "city": "Munich"},
+    {"name": "Leopoldstraße", "city": "Munich"}
+  ]
+}
