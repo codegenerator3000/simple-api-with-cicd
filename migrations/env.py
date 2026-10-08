@@ -37,7 +37,7 @@ def run_migrations_offline() -> None:
 
     """
     context.configure(
-        url=str(database_url),
+        url=database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -60,7 +60,7 @@ async def run_async_migrations() -> None:
 
     """
 
-    connectable = create_async_engine(str(database_url), poolclass=pool.NullPool)
+    connectable = create_async_engine(database_url, poolclass=pool.NullPool)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
