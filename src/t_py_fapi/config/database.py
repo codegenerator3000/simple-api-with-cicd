@@ -1,14 +1,14 @@
-from sqlalchemy.engine import URL
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from sqlalchemy.engine import URL
 
 
 class DatabaseSettings(BaseSettings):
     model_config = SettingsConfigDict(
-            env_prefix="DB_",
-            env_file=".env",
-            extra="ignore",
-            )
+        env_prefix="DB_",
+        env_file=".env",
+        extra="ignore",
+    )
 
     host: str
     port: int
