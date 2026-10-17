@@ -61,6 +61,8 @@ test:
     - .uv_job
     - .dind
   script:
+    - echo "DOCKER_CERT_PATH=$DOCKER_CERT_PATH"
+    - ls -la "$DOCKER_CERT_PATH"
     - uv sync --locked
     - uv run pytest
 
