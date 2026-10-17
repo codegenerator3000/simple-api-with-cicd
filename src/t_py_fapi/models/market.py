@@ -1,14 +1,16 @@
 from datetime import time
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .street import StreetDTO
 
 
 class MarketDTO(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     street: StreetDTO
-    home_address: str
+    house_number: str
     opening_time: time
     closing_time: time

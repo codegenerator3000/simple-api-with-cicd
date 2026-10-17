@@ -32,7 +32,7 @@ erDiagram
         int id PK
         string name
         int street_id FK
-        string home_address
+        string house_number
         time opening_time
         time closing_time
     }
