@@ -14,3 +14,11 @@ class MarketDTO(BaseModel):
     house_number: str
     opening_time: time
     closing_time: time
+
+
+class MarketCreate(BaseModel):
+    name: str
+    street_id: int
+    house_number: str
+    opening_time: time
+    closing_time: time
