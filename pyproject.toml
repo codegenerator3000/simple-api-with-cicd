@@ -9,12 +9,33 @@ dependencies = [
     "asyncmy>=0.2.16",
     "cryptography>=50.0.2",
     "fastapi[standard]>=0.142.2",
-    "pytest>=9.1.1",
     "sqlalchemy[asyncio]>=2.1.3",
+]
+
+[dependency-groups]
+dev = [
+    "aiosqlite>=0.22.1",
+    "faker>=40.43.0",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.17.0",
+    "testcontainers[mysql]>=4.15.0",
 ]
 
 [tool.fastapi]
 entrypoint = "t_py_fapi.main:app"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: tests that require the MySQL testcontainer",
+]
+
+[tool.ruff]
+target-version = "py314"
+# Alembic-generated revision files are not hand-maintained; leave them alone.
+extend-exclude = ["migrations/versions"]
 
 
 [build-system]
