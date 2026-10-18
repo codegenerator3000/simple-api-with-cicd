@@ -3,14 +3,12 @@
 # Prerequisites on the GitLab side (not configurable from this file):
 #   - the runner uses the docker executor and is registered with
 #     privileged = true (needed for the docker-in-docker service below)
-#   - the project's Container Registry is enabled, otherwise the
-#     build job fails on an empty $CI_REGISTRY
 #   - if the runner is registered with specific tags, mirror them on the jobs
 
 stages:
   - lint
   - test
-  - build
+  - deploy
 
 # One pipeline per change: an MR pipeline when a merge request is open,
 # otherwise a plain branch pipeline (no duplicates).
@@ -65,25 +63,15 @@ test:
     - .uv_job
     - .dind
   script:
-    - echo "DOCKER_CERT_PATH=$DOCKER_CERT_PATH"
-    - ls -la "$DOCKER_CERT_PATH"
     - uv sync --locked
     - uv run pytest
 
-build:
-  stage: build
+deploy:
+  stage: deploy
   image: docker:29.9.1-cli
-  extends: .dind
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_TAG
+  tags:
+    - deploy
+    - shell
+  environment: production
   script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
-    # Also tag :latest when building from the default branch
-    - |
-      if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
-        docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE:latest"
-        docker push "$CI_REGISTRY_IMAGE:latest"
-      fi
+    - docker compose -f prod.compose.yaml up -d --build
