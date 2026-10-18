@@ -31,9 +31,7 @@ async def seed_cities_and_streets() -> None:
     try:
         async with SessionLocal() as session:
             city_ids, added_cities = await _seed_cities(session, seed_data.cities)
-            added_streets = await _seed_streets(
-                session, seed_data.streets, city_ids
-            )
+            added_streets = await _seed_streets(session, seed_data.streets, city_ids)
             await session.commit()
             logger.info(
                 "Seed check done: %d cities, %d streets newly inserted",
@@ -91,9 +89,7 @@ async def _seed_streets(
     for item in streets:
         city_id = city_ids.get(item.city)
         if city_id is None:
-            logger.warning(
-                "Skipping street %r: unknown city %r", item.name, item.city
-            )
+            logger.warning("Skipping street %r: unknown city %r", item.name, item.city)
             continue
         if (city_id, item.name) not in existing:
             session.add(Street(name=item.name, city_id=city_id))

@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 from datetime import time
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, Integer, String, Time
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, intpk
+
+if TYPE_CHECKING:
+    from .street import Street
 
 
 class Market(Base):
@@ -16,4 +22,4 @@ class Market(Base):
     opening_time: Mapped[time] = mapped_column(Time)
     closing_time: Mapped[time] = mapped_column(Time)
 
-    street: Mapped["Street"] = relationship(back_populates="markets")
+    street: Mapped[Street] = relationship(back_populates="markets")
