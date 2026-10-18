@@ -17,16 +17,6 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS == null
 
-variables:
-  # The app reads DB_* at import time and CI has no .env; the integration
-  # suite uses its own testcontainers MySQL, so these are placeholders only.
-  DB_HOST: 127.0.0.1
-  DB_PORT: "3306"
-  DB_NAME: ci
-  DB_USER: ci
-  DB_PASSWORD: ci
-  UV_CACHE_DIR: $CI_PROJECT_DIR/.uv-cache
-
 .uv_job:
   image: ghcr.io/astral-sh/uv:python3.14-bookworm-slim
   cache:
@@ -65,13 +55,25 @@ test:
   script:
     - uv sync --locked
     - uv run pytest
+  variables:
+    DB_HOST: 127.0.0.1
+    DB_PORT: "3306"
+    DB_NAME: ci
+    DB_USER: ci
+    DB_PASSWORD: ci
+    UV_CACHE_DIR: $CI_PROJECT_DIR/.uv-cache
 
 deploy:
   stage: deploy
   image: docker:29.9.1-cli
   tags:
-    - deploy
-    - shell
+    - main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      when: manual
+      allow_failure: false
   environment: production
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
   script:
     - docker compose -f prod.compose.yaml up -d --build
