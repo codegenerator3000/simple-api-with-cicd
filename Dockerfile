@@ -14,6 +14,8 @@ COPY pyproject.toml uv.lock .python-version README.md ./
 RUN uv sync --locked --no-install-project
 
 # Copy the project source and install the project itself
+COPY migrations ./migrations
+COPY alembic.ini .
 COPY src ./src
 RUN uv sync --locked
 
