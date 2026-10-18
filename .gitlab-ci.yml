@@ -40,7 +40,11 @@ variables:
 
 .dind:
   services:
-    - docker:27-dind
+    - name: docker:29.9.1-dind
+      alias: docker
+      variables:
+        HEALTHCHECK_TCP_PORT: "2376"
+  
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: "/certs"
@@ -68,7 +72,7 @@ test:
 
 build:
   stage: build
-  image: docker:27
+  image: docker:29.9.1-cli
   extends: .dind
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
